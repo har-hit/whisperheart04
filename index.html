@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhisperHeart - Anonymous Confessions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: #764ba2;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .confession-post {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e5e9;
+            transition: all 0.3s ease;
+        }
+
+        .confession-post:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .post-info {
+            flex: 1;
+        }
+
+        .post-author {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .post-meta {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .category-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .post-content {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .action-btn.liked {
+            color: #e91e63;
+        }
+
+        .action-btn.shared {
+            color: #4caf50;
+        }
+
+        .comments-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .comment-text {
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .comment-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .feed-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #764ba2;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-modal.active {
+            display: flex;
+        }
+
+        .share-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .share-option {
+            padding: 1rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-option:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .call-status {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .call-avatar {
+            margin-bottom: 2rem;
+        }
+
+        .avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        .call-info h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .call-info p {
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        #callTimer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .call-controls {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .mute-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .mute-btn.muted {
+            background: #dc3545;
+        }
+
+        .end-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .speaker-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .speaker-btn.active {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .call-quality {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .quality-indicator {
+            display: flex;
+            gap: 2px;
+        }
+
+        .signal-bar {
+            width: 4px;
+            height: 12px;
+            background: #28a745;
+            border-radius: 2px;
+            animation: signalPulse 1.5s infinite;
+        }
+
+        .signal-bar:nth-child(1) { animation-delay: 0s; height: 8px; }
+        .signal-bar:nth-child(2) { animation-delay: 0.1s; height: 10px; }
+        .signal-bar:nth-child(3) { animation-delay: 0.2s; height: 12px; }
+        .signal-bar:nth-child(4) { animation-delay: 0.3s; height: 14px; }
+
+        @keyframes signalPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .quality-text {
+            color: #28a745;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                padding: 1rem;
+            }
+            
+            .post-actions {
+                flex-wrap: wrap;
+            }
+            
+            .comment-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>💭 WhisperHeart</h1>
+            <p>Share your feelings anonymously</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('feed')">Feed</button>
+            <button class="nav-tab" onclick="switchTab('confess')">Confess</button>
+            <button class="nav-tab" onclick="switchTab('connect')">Connect</button>
+        </div>
+
+        <!-- Feed Tab -->
+        <div class="tab-content active" id="feed">
+            <div class="feed-header">
+                <h2 class="feed-title">Anonymous Confessions</h2>
+                <select class="filter-select" onchange="filterPosts(this.value)">
+                    <option value="all">All Categories</option>
+                    <option value="love">Love & Romance</option>
+                    <option value="friendship">Friendship</option>
+                    <option value="family">Family</option>
+                    <option value="work">Work & Career</option>
+                    <option value="personal">Personal Growth</option>
+                </select>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">1,247</div>
+                    <div class="stat-label">Confessions</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">356</div>
+                    <div class="stat-label">Online Now</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8.2k</div>
+                    <div class="stat-label">Total Likes</div>
+                </div>
+            </div>
+
+            <div id="postsContainer">
+                <!-- Posts will be dynamically generated -->
+            </div>
+        </div>
+
+        <!-- Confess Tab -->
+        <div class="tab-content" id="confess">
+            <h2 style="margin-bottom: 1.5rem; color: #333;">Share Your Heart</h2>
+            
+            <div class="form-group">
+                <label for="confessionText">What's on your mind?</label>
+                <textarea id="confessionText" placeholder="Share your thoughts, feelings, or confession anonymously..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="confessionCategory">Category</label>
+                <select id="confessionCategory" required>
+                    <option value="">Choose a category</option>
+                    <option value="love">Love & Romance</option>
+                    <option value="friendship">Friendship</option>
+                    <option value="family">Family</option>
+                    <option value="work">Work & Career</option>
+                    <option value="personal">Personal Growth</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="postConfession()">Post Confession</button>
+        </div>
+
+        <!-- Connect Tab -->
+        <div class="tab-content" id="connect">
+            <div id="connectionSetup">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">Find Your Connection</h2>
+                
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="">Select your gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" min="13" max="100" placeholder="Enter your age" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location (City)</label>
+                    <input type="text" id="location" placeholder="e.g., New York" required>
+                </div>
+
+                <button class="btn" onclick="findConnection()">Find Someone to Talk To</button>
+            </div>
+
+            <div id="voiceCallInterface" style="display: none;">
+                <div class="call-status">
+                    <div class="call-avatar">
+                        <div class="avatar-large">AF</div>
+                        <div class="call-info">
+                            <h3 id="callerName">Anonymous Friend</h3>
+                            <p id="callStatus">Connecting...</p>
+                            <p id="callTimer">00:00</p>
+                        </div>
+                    </div>
+
+                    <div class="call-controls">
+                        <button class="control-btn mute-btn" id="muteBtn" onclick="toggleMute()">
+                            🎤
+                        </button>
+                        <button class="control-btn end-btn" onclick="endCall()">
+                            📞
+                        </button>
+                        <button class="control-btn speaker-btn" id="speakerBtn" onclick="toggleSpeaker()">
+                            🔊
+                        </button>
+                    </div>
+
+                    <div class="call-quality">
+                        <div class="quality-indicator">
+                            <span class="signal-bar"></span>
+                            <span class="signal-bar"></span>
+                            <span class="signal-bar"></span>
+                            <span class="signal-bar"></span>
+                        </div>
+                        <span class="quality-text">Good Connection</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-content">
+            <h3 style="margin-bottom: 1rem; color: #333;">Share This Confession</h3>
+            <p style="color: #666; margin-bottom: 1rem;">Help others by sharing this meaningful confession</p>
+            
+            <div class="share-options">
+                <div class="share-option" onclick="shareToSocial('twitter')">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🐦</div>
+                    <div style="font-weight: 600;">Twitter</div>
+                </div>
+                <div class="share-option" onclick="shareToSocial('facebook')">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📘</div>
+                    <div style="font-weight: 600;">Facebook</div>
+                </div>
+                <div class="share-option" onclick="shareToSocial('copy')">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📋</div>
+                    <div style="font-weight: 600;">Copy Link</div>
+                </div>
+                <div class="share-option" onclick="shareToSocial('whatsapp')">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💬</div>
+                    <div style="font-weight: 600;">WhatsApp</div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="closeShareModal()" style="margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="floating-btn" onclick="switchTab('confess')" title="New Confession">
+        ✍️
+    </button>
+
+    <script>
+        let currentTab = 'feed';
+        let posts = [];
+        let currentSharePost = null;
+        
+        // Voice call variables
+        let localStream = null;
+        let remoteStream = null;
+        let peerConnection = null;
+        let callStartTime = null;
+        let callTimer = null;
+        let isMuted = false;
+        let isSpeakerOn = false;
+
+        // WebRTC configuration
+        const rtcConfiguration = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' }
+            ]
+        };
+
+        // Sample confession data
+        const samplePosts = [
+            {
+                id: 1,
+                author: "Anonymous Heart",
+                avatar: "AH",
+                time: "2 hours ago",
+                category: "love",
+                content: "I've been in love with my best friend for 3 years but I'm too scared to tell them. Every day I wonder what would happen if I just had the courage to speak up. The fear of losing our friendship keeps me silent, but this feeling is eating me alive.",
+                likes: 47,
+                comments: [
+                    { author: "Brave Soul", text: "I was in the same situation and I told them. Even though they didn't feel the same way, our friendship actually got stronger. Sometimes honesty is the best policy." },
+                    { author: "Wise Words", text: "Take your time, but don't wait forever. Life is too short for regrets." }
+                ],
+                shares: 12,
+                liked: false,
+                shared: false
+            },
+            {
+                id: 2,
+                author: "Midnight Thoughts",
+                avatar: "MT",
+                time: "5 hours ago",
+                category: "personal",
+                content: "I quit my corporate job last month to follow my passion for art. Everyone thinks I'm crazy, but for the first time in years, I wake up excited about my day. Sometimes the scariest decisions lead to the most beautiful outcomes.",
+                likes: 89,
+                comments: [
+                    { author: "Dream Chaser", text: "You're living my dream! How did you find the courage to take that leap?" },
+                    { author: "Art Lover", text: "Following your passion is never crazy. The world needs more people like you!" }
+                ],
+                shares: 23,
+                liked: false,
+                shared: false
+            },
+            {
+                id: 3,
+                author: "Healing Heart",
+                avatar: "HH",
+                time: "1 day ago",
+                category: "family",
+                content: "I forgave my father today after 10 years of not speaking. He's not perfect, but neither am I. Life's too short to hold onto anger when there's a chance for love and understanding.",
+                likes: 156,
+                comments: [
+                    { author: "Peaceful Mind", text: "Forgiveness is the greatest gift you can give yourself. Proud of you for taking this step." }
+                ],
+                shares: 31,
+                liked: false,
+                shared: false
+            }
+        ];
+
+        // Initialize the app
+        function init() {
+            posts = [...samplePosts];
+            renderPosts();
+        }
+
+        function switchTab(tab) {
+            // Remove active class from all tabs and content
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            event.target.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+            
+            currentTab = tab;
+        }
+
+        function renderPosts() {
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = '';
+            
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
+                container.appendChild(postElement);
+            });
+        }
+
+        function createPostElement(post) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'confession-post';
+            postDiv.innerHTML = `
+                <div class="post-header">
+                    <div class="avatar">${post.avatar}</div>
+                    <div class="post-info">
+                        <div class="post-author">${post.author}</div>
+                        <div class="post-meta">${post.time}</div>
+                    </div>
+                    <div class="category-tag">${post.category}</div>
+                </div>
+                <div class="post-content">${post.content}</div>
+                <div class="post-actions">
+                    <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                        ${post.liked ? '❤️' : '🤍'} ${post.likes}
+                    </button>
+                    <button class="action-btn" onclick="toggleComments(${post.id})">
+                        💬 ${post.comments.length}
+                    </button>
+                    <button class="action-btn ${post.shared ? 'shared' : ''}" onclick="sharePost(${post.id})">
+                        🔄 ${post.shares}
+                    </button>
+                </div>
+                <div class="comments-section" id="comments-${post.id}" style="display: none;">
+                    ${post.comments.map(comment => `
+                        <div class="comment">
+                            <div class="comment-author">${comment.author}</div>
+                            <div class="comment-text">${comment.text}</div>
+                        </div>
+                    `).join('')}
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Add a supportive comment..." id="comment-input-${post.id}">
+                        <button class="comment-btn" onclick="addComment(${post.id})">Post</button>
+                    </div>
+                </div>
+            `;
+            return postDiv;
+        }
+
+        function toggleLike(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                renderPosts();
+            }
+        }
+
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            const isVisible = commentsSection.style.display !== 'none';
+            commentsSection.style.display = isVisible ? 'none' : 'block';
+        }
+
+        function addComment(postId) {
+            const input = document.getElementById(`comment-input-${postId}`);
+            const commentText = input.value.trim();
+            
+            if (commentText) {
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments.push({
+                        author: "Anonymous Friend",
+                        text: commentText
+                    });
+                    input.value = '';
+                    renderPosts();
+                    toggleComments(postId); // Keep comments visible
+                }
+            }
+        }
+
+        function sharePost(postId) {
+            currentSharePost = postId;
+            const post = posts.find(p => p.id === postId);
+            if (post && !post.shared) {
+                document.getElementById('shareModal').classList.add('active');
+            }
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
+            currentSharePost = null;
+        }
+
+        function shareToSocial(platform) {
+            const post = posts.find(p => p.id === currentSharePost);
+            if (post) {
+                post.shared = true;
+                post.shares += 1;
+                
+                // Simulate social sharing
+                const messages = {
+                    twitter: "Shared to Twitter! 🐦",
+                    facebook: "Shared to Facebook! 📘",
+                    copy: "Link copied to clipboard! 📋",
+                    whatsapp: "Shared to WhatsApp! 💬"
+                };
+                
+                alert(messages[platform]);
+                closeShareModal();
+                renderPosts();
+            }
+        }
+
+        function postConfession() {
+            const text = document.getElementById('confessionText').value.trim();
+            const category = document.getElementById('confessionCategory').value;
+            
+            if (!text || !category) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            const newPost = {
+                id: posts.length + 1,
+                author: "Anonymous Confessor",
+                avatar: "AC",
+                time: "Just now",
+                category: category,
+                content: text,
+                likes: 0,
+                comments: [],
+                shares: 0,
+                liked: false,
+                shared: false
+            };
+            
+            posts.unshift(newPost);
+            
+            // Clear form
+            document.getElementById('confessionText').value = '';
+            document.getElementById('confessionCategory').value = '';
+            
+            // Switch to feed and show success
+            switchTab('feed');
+            setTimeout(() => {
+                alert('Your confession has been posted anonymously! 💭');
+                renderPosts();
+            }, 500);
+        }
+
+        function filterPosts(category) {
+            const filteredPosts = category === 'all' ? samplePosts : samplePosts.filter(post => post.category === category);
+            posts = [...filteredPosts];
+            renderPosts();
+        }
+
+        function findConnection() {
+            const gender = document.getElementById('gender').value;
+            const age = document.getElementById('age').value;
+            const location = document.getElementById('location').value;
+            
+            if (!gender || !age || !location) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+                            alert('🔍 Searching for connections in your area...\n\nThis feature will connect you with someone to chat anonymously!');
+        }
+
+        // Initialize the app when page loads
+        window.addEventListener('load', init);
+
+        // Click outside modal to close
+        document.getElementById('shareModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeShareModal();
+            }
+        });
+    </script>
+</body>
+</html>
